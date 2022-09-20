@@ -14,6 +14,7 @@ const nextBtn = $('.btn-next');
 const prevBtn = $('.btn-prev');
 const randomBtn = $('.btn-random');
 const repeatBtn = $('.btn-repeat');
+const playList = $('.play-list');
 
 const app = {
     currentIndex: 0,
@@ -208,7 +209,15 @@ const app = {
                 nextBtn.click();
             }
         }
+
+        //xử lý click to play song in song list
+        playList.onclick = function(){
+
+        }
+
+        //xử lý config -> lưu lại config đã set -> khi f5 vẫn hiển thị lại setting đã set
     },
+    //scroll the screen to the active song.
     scrollIntoActiveSong: function(){
         $('.song.active').scrollIntoView({
             block: 'end',
@@ -244,9 +253,6 @@ const app = {
         } while (newIndex === this.currentIndex)
         app.currentIndex = newIndex;
         this.loadCurrentSong()
-    },
-    playRepeat: function(){
-        //khi play hết bài hát sẽ ko play next
     },
     start: function() {
         // định nghĩa các thuộc tính cho object
