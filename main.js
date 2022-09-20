@@ -65,6 +65,7 @@ const app = {
             image: 'assets/img/song7.png'
         },
     ],
+    //render songs into GUI
     render: function(){
         const html = this.songs.map((song, index) => {
             return `
@@ -83,6 +84,7 @@ const app = {
         })
         playlist.innerHTML = html.join('');
     },
+    //define function getter cho Object app -> chỉ cần this.currentSong -> trả về song info like name,singer...
     defineProperties: function(){
         Object.defineProperty(this, 'currentSong', {
             get: function(){
@@ -90,6 +92,7 @@ const app = {
             }
         })
     },
+    //xử lý các event trong GUI
     handleEvents: function(){
         const _this = this;
         const cdWidth = cd.offsetWidth;
@@ -224,6 +227,7 @@ const app = {
             behavior: 'smooth'
         });
     },
+    //load info của current song to GUI ex: name, Image
     loadCurrentSong: function(){
         
         heading.textContent = this.currentSong.name;
@@ -231,6 +235,7 @@ const app = {
         audio.src = this.currentSong.path;
 
     },
+    //hàm để giảm index của song để lấy song trước đó
     prevSong: function(){
         this.currentIndex--;
         if(this.currentIndex < 0){
@@ -238,6 +243,7 @@ const app = {
         }
         this.loadCurrentSong();
     },
+    //hàm để tăng index của song để lấy song tiếp theo
     nextSong: function(){
         this.currentIndex++;
         if(this.currentIndex >= this.songs.length){
@@ -246,6 +252,7 @@ const app = {
         this.loadCurrentSong();
 
     },
+    //hàm random index của song in song list
     playRandom: function(){
         let newIndex;
         do {
