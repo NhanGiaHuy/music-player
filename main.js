@@ -190,8 +190,18 @@ const app = {
         }
 
         //xử lý next/repeat khi phát hết nhạc
+        audio.onended = function(){
+            // if(_this.isRandom){
+            //     _this.playRandom();
+            // }else{
+            //     _this.nextSong();
+            // }
+            // audio.play()
 
-        
+            nextBtn.click();
+        }
+
+        //xử lý 
 
 
     },
