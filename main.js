@@ -187,6 +187,7 @@ const app = {
         repeatBtn.onclick = function(e){
             _this.isRepeat = !_this.isRepeat;
             repeatBtn.classList.toggle('active', _this.isRepeat);
+
         }
 
         //xử lý next/repeat khi phát hết nhạc
@@ -197,13 +198,12 @@ const app = {
             //     _this.nextSong();
             // }
             // audio.play()
-
-            nextBtn.click();
+            if(_this.isRepeat){
+                audio.play();
+            }else{
+                nextBtn.click();
+            }
         }
-
-        //xử lý 
-
-
     },
     loadCurrentSong: function(){
         
