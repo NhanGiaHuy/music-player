@@ -1,8 +1,9 @@
 const $ = document.querySelector.bind(document);
 const $$ = document.querySelectorAll.bind(document);
 
+const PLAYER_STORAGE_KEY = 'F8_PLAYER';
 
-const player = $('.player')
+const player = $('.player');
 const playlist = $('.playlist');
 const cd = $('.cd');
 const heading = $('header h2');
@@ -14,13 +15,15 @@ const nextBtn = $('.btn-next');
 const prevBtn = $('.btn-prev');
 const randomBtn = $('.btn-random');
 const repeatBtn = $('.btn-repeat');
-const playList = $('.play-list');
+const playList = $('.playlist');
+
 
 const app = {
     currentIndex: 0,
     isPlaying: false,
     isRandom: false,
     isRepeat: false,
+    config: JSON.parse(localStorage.getItem(PLAYER_STORAGE_KEY)) || {},
     songs: [
         {
             name: 'Song1',
@@ -65,11 +68,15 @@ const app = {
             image: 'assets/img/song7.png'
         },
     ],
+    setConfig: function(key, value){
+        this.config[key] = value;
+        localStorage.setItem(PLAYER_STORAGE_KEY, JSON.stringify(this.config));
+    },
     //render songs into GUI
     render: function(){
         const html = this.songs.map((song, index) => {
             return `
-                <div class="song ${index === this.currentIndex ? 'active' : ''}">
+                <div class="song ${index === this.currentIndex ? 'active' : ''}" data-index="${index}">
                     <div class="thumb" style="background-image: url('${song.image}')">
                     </div>
                     <div class="body">
@@ -179,33 +186,21 @@ const app = {
 
         //xử lý random bài hát bật tắt
         randomBtn.onclick = function(e){
-            // if(_this.isRandom === true){
-            //     randomBtn.classList.remove('active');
-            //     _this.isRandom = false;
-            // }else{
-            //     randomBtn.classList.add('active');
-            //     _this.isRandom = true;
-            // }
-
             _this.isRandom = !_this.isRandom;
+            _this.setConfig('isRandom',_this.isRandom);
             randomBtn.classList.toggle('active', _this.isRando);
         }
 
         //xử lý repeat bật tắt
         repeatBtn.onclick = function(e){
             _this.isRepeat = !_this.isRepeat;
+            _this.setConfig('isRepeat',_this.isRepeat);
             repeatBtn.classList.toggle('active', _this.isRepeat);
 
         }
 
         //xử lý next/repeat khi phát hết nhạc
         audio.onended = function(){
-            // if(_this.isRandom){
-            //     _this.playRandom();
-            // }else{
-            //     _this.nextSong();
-            // }
-            // audio.play()
             if(_this.isRepeat){
                 audio.play();
             }else{
@@ -214,8 +209,16 @@ const app = {
         }
 
         //xử lý click to play song in song list
-        playList.onclick = function(){
-
+        playList.onclick = function(e){
+            const songNode = e.target.closest('.song:not(.active)');
+            if(songNode && !e.target.closest('.option')){
+                // songNode.getAttribute('data-index')
+                _this.currentIndex = Number(songNode.dataset.index);
+                _this.loadCurrentSong();
+                _this.render();
+                audio.play();
+                
+            }
         }
 
         //xử lý config -> lưu lại config đã set -> khi f5 vẫn hiển thị lại setting đã set
@@ -234,6 +237,16 @@ const app = {
         CDThumb.style.backgroundImage = `url('${this.currentSong.image}')` ;
         audio.src = this.currentSong.path;
 
+    },
+    //load config
+    loadConfig: function(){
+        this.isRandom = this.config.isRandom;
+        this.isRepeat = this.config.isRepeat;
+        randomBtn.classList.toggle('active', this.isRando);
+        repeatBtn.classList.toggle('active', this.isRepeat);
+
+        //cach thu 2
+        // Object.assign(this, this.config);
     },
     //hàm để giảm index của song để lấy song trước đó
     prevSong: function(){
@@ -262,6 +275,9 @@ const app = {
         this.loadCurrentSong()
     },
     start: function() {
+        //gán cấu hình từ local to ứng dụng
+        this.loadConfig();
+
         // định nghĩa các thuộc tính cho object
         this.defineProperties();
 
