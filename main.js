@@ -188,7 +188,7 @@ const app = {
         randomBtn.onclick = function(e){
             _this.isRandom = !_this.isRandom;
             _this.setConfig('isRandom',_this.isRandom);
-            randomBtn.classList.toggle('active', _this.isRando);
+            randomBtn.classList.toggle('active', _this.isRandom);
         }
 
         //xử lý repeat bật tắt
@@ -240,10 +240,8 @@ const app = {
     },
     //load config
     loadConfig: function(){
-        this.isRandom = this.config.isRandom;
-        this.isRepeat = this.config.isRepeat;
-        randomBtn.classList.toggle('active', this.isRando);
-        repeatBtn.classList.toggle('active', this.isRepeat);
+        app.isRandom = this.config.isRandom;
+        app.isRepeat = this.config.isRepeat;
 
         //cach thu 2
         // Object.assign(this, this.config);
@@ -289,6 +287,10 @@ const app = {
 
         //render playlist
         this.render();
+
+        
+        randomBtn.classList.toggle('active', this.isRandom);
+        repeatBtn.classList.toggle('active', this.isRepeat);
     }
 }
 
