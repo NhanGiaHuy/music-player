@@ -83,9 +83,6 @@ const app = {
                     <h3 class="title">${song.name}</h3>
                     <p class="author">${song.singer}</p>
                     </div>
-                    <div class="option">
-                    <i class="fas fa-ellipsis-h"></i>
-                    </div>
                 </div>
             `
         })
@@ -211,17 +208,16 @@ const app = {
         //xử lý click to play song in song list
         playList.onclick = function(e){
             const songNode = e.target.closest('.song:not(.active)');
-            if(songNode && !e.target.closest('.option')){
-                // songNode.getAttribute('data-index')
+            if(songNode){
                 _this.currentIndex = Number(songNode.dataset.index);
                 _this.loadCurrentSong();
                 _this.render();
-                audio.play();
-                
+                audio.play();  
             }
         }
 
-        //xử lý config -> lưu lại config đã set -> khi f5 vẫn hiển thị lại setting đã set
+        //xử lý click to option
+
     },
     //scroll the screen to the active song.
     scrollIntoActiveSong: function(){
